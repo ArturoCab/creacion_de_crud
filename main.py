@@ -2,9 +2,11 @@ clients ='pablo,ricardo,'
 
 def create_client(client_name):
     global clients
-    clients += client_name
-
-    _add_comma()
+    if client_name not in clients:
+        clients += client_name
+        _add_comma()
+    else:
+        print('Client already in the client\'s list')
 
 
 def list_clients():
@@ -18,7 +20,25 @@ def _add_comma():
     clients += ','
 
 
+def _print_welcome():
+    print("welcome to nxp ventas")
+    print('*'*50)
+    print('what would you like to do today?')
+    print('[C]reate client')
+    print('[D]elete client')
+
+
+
 if __name__ == '__main__':
-    list_clients()
-    create_client('david')
-    list_clients()
+    _print_welcome()
+
+    command = input()
+
+    if command == 'C':
+        client_name = input('what is the client name? ')
+        create_client(client_name)
+        list_clients()
+    elif command=='D':
+        pass
+    else:
+        print("invalid conmmand")
