@@ -1,10 +1,24 @@
 import sys
-clients = ['pablo','ricardo']
+clients = [
+    {
+        'name':'Pablo',
+        'company': 'Google',
+        'email': 'pablo@google.com',
+        'position': 'Software engineer'
+    },
+    {
+        'name':'Ricardo',
+        'company': 'Facebook',
+        'email': 'ricardo@facebook.com',
+        'position': 'Data engineer'
+    }
+]
 
-def create_client(client_name):
+def create_client(client):
     global clients
-    if client_name not in clients:
-        clients.append(client_name)
+
+    if client not in clients:
+        clients.append(client)
     else:
         print('Client already in the client\'s list')
 
@@ -12,7 +26,13 @@ def create_client(client_name):
 def list_clients():
     global clients
     for idx, client in enumerate(clients):
-        print('{}:{}'.format(idx,client))
+        print('{uid} | {name} | {company} | {email} | {position}'.format(
+            uid = idx,
+            name = client['name'],
+            company = client['company'],
+            email = client['email'],
+            position = client['position']
+        ))
 
 
 def update_client(client_name, updated_client_name):
@@ -28,10 +48,19 @@ def update_client(client_name, updated_client_name):
 
 def delete_client(client_name):
     global clients
-    if client_name in clients:
-        clients.remove(client_name)
+    found = False
+
+    for idx, client in enumerate(clients):
+        if client['name'] == client_name:
+            found = True
+            break
+
+    if found:
+        client = clients.pop(idx)
+        return client
     else:
-        print('Client is not in clients list')
+        print("Client is not in list")
+        return None
 
 
 def search_client(client_name):
@@ -57,6 +86,11 @@ def _print_welcome():
     print('*'*50)
     print('[Q]uit program')
 
+def _get_client_field(field_name):
+    field = None
+    while not field:
+        field = input('What is the client {}? >> '.format(field_name))
+    return field
 
 def _get_client_name():
     client_name = None
@@ -78,8 +112,13 @@ if __name__ == '__main__':
         command = input().upper()
 
         if command == 'C':
-            client_name = _get_client_name()
-            create_client(client_name)
+            client ={
+                'name': _get_client_field('name'),
+                'company': _get_client_field('company'),
+                'email': _get_client_field('email'),
+                'position': _get_client_field('position')
+            }
+            create_client(client)
             list_clients()
             continue
         elif command == 'L':
